@@ -1,0 +1,83 @@
+## =======================================================================
+## .NET / Visual Studio Build & Artifacts
+## Ref: https://github.com/omran95/.NET-Clean-Architecture-example/blob/main/.gitignore
+## =======================================================================
+# Ignore compilation build outputs from all layers (Domain, Application, Infrastructure, WebApi)
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+
+# Log files
+*.log
+[Ll]og/
+[Ll]ogs/
+
+## =======================================================================
+## IDE & Editor Specific Files (Visual Studio, VS Code, JetBrains Rider)
+## =======================================================================
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+## =======================================================================
+## Package & Dependency Management
+## =======================================================================
+# NuGet Packages
+*.nuget.props
+*.nuget.targets
+packages/
+# Restore artifacts
+project.lock.json
+project.fragment.lock.json
+
+## =======================================================================
+## Environment, Secrets & Local Configurations
+## =======================================================================
+# NEVER commit environment-specific configurations or local app secrets
+**/appsettings.Development.json
+**/appsettings.Local.json
+*.secrets.json
+.env
+
+## =======================================================================
+## Local Databases & Persistent Storage
+## =======================================================================
+# Database files used for local Infrastructure testing (EF Core, SQLite, etc.)
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.db-shm
+*.db-wal
+
+## =======================================================================
+## Operating System Specific Files
+## =======================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
