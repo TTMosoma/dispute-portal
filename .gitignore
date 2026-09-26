@@ -53,7 +53,7 @@ project.fragment.lock.json
 ## Environment, Secrets & Local Configurations
 ## =======================================================================
 # NEVER commit environment-specific configurations or local app secrets
-**/appsettings.Development.json
+## While in practice ignoring development settings is good, for the purposes of this exercise I  **/appsettings.Development.json
 **/appsettings.Local.json
 *.secrets.json
 .env
