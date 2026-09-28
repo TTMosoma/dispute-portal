@@ -1,10 +1,8 @@
 
 public class InvalidDisputeTransitionException : DomainException
 {
-    public string TransitionGuid { get; }
-    public InvalidDisputeTransitionException(string message, Guid transitionGuid)
-        : base(message)
+    public InvalidDisputeTransitionException(DisputeStatus from, DisputeStatus to, Role role)
+        : base($"Cannot move dispute from {from} to {to} as {role}.")
     {
-        TransitionGuid = transitionGuid.ToString();
     }
 }

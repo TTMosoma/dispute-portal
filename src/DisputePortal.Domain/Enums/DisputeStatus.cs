@@ -1,6 +1,8 @@
 public enum DisputeStatus
 {
     Submitted,
-    InReview,
-    Complete,
+    UnderReview,
+    Withdrawn,
+    Rejected,
+    Resolved
 }

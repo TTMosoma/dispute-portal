@@ -1,5 +1,5 @@
 public enum Role
 {
     Customer,
-    BackOfficeAgent
+    Agent
 }
