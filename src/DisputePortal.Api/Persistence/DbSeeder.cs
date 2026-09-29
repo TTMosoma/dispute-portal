@@ -1,3 +1,4 @@
+using DisputePortal.Domain.Entities;
 using DisputePortal.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

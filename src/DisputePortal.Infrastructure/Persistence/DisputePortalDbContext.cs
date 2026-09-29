@@ -1,3 +1,4 @@
+using DisputePortal.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DisputePortal.Infrastructure.Persistence
