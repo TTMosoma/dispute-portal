@@ -1,13 +1,17 @@
-public class Account
+namespace Dispute.Domain.Entities
 {
-    private Account() { }
-    public Account(Guid customerId, string accountNumber)
+
+    public class Account
     {
-        Id = Guid.NewGuid();
-        CustomerId = customerId;
-        AccountNumber = accountNumber;
+        private Account() { }
+        public Account(Guid userId, string accountNumber)
+        {
+            Id = Guid.NewGuid();
+            UserId = userId;
+            AccountNumber = accountNumber;
+        }
+        public Guid Id { get; private set; }
+        public Guid UserId { get; private set; }
+        public string AccountNumber { get; private set; } = null!;
     }
-    public Guid Id { get; private set; }
-    public Guid CustomerId { get; private set; }
-    public string AccountNumber { get; private set; } = null!;
 }
