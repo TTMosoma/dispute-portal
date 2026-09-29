@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: disputeportal
+      POSTGRES_USER: disputeportal
+      POSTGRES_PASSWORD: dev123
+    ports: ["5432:5432"]
+    volumes: ["dbdata:/var/lib/postgresql/data"]
+volumes:
+  dbdata:
