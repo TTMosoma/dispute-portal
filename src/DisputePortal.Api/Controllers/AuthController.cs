@@ -1,3 +1,5 @@
+namespace DisputePortal.Api.Controllers;
+
 using DisputePortal.Api.Auth;
 using DisputePortal.Api.DataTransferObjects.Requests;
 using DisputePortal.Api.DataTransferObjects.Responses;
