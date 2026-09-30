@@ -1,1 +1,66 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --accent: #005baa;
+  --border: #d0d5dd;
+  --text: #1a1a1a;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  color: var(--text);
+  background: #f7f8fa;
+}
+h1 {
+  font-size: 1.4rem;
+}
+input,
+select,
+textarea {
+  padding: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+button {
+  padding: 0.55rem 1rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+button:hover {
+  background: #004a8c;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+th,
+td {
+  text-align: left;
+  padding: 0.7rem;
+  border-bottom: 1px solid #eee;
+}
+th {
+  background: #f0f2f5;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+a {
+  color: var(--accent);
+}
