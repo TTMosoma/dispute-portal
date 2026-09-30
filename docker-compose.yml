@@ -27,6 +27,14 @@ services:
       Jwt__Audience: "DisputePortal"
       Jwt__ExpiryMinutes: "60"
     ports: ["5290:8080"]
+  
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports: ["4200:80"]
 
 volumes:
   dbdata:
