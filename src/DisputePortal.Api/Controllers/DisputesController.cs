@@ -22,10 +22,6 @@ public class DisputesController(DisputePortalDbContext db) : ControllerBase
 
         var existingUserTransaction = await db.Transactions.AnyAsync(t => t.Id == request.TransactionId && db.Accounts.Any(a => a.UserId == userId && a.Id == t.AccountId));
 
-        Console.WriteLine($"request.TransactionId = {request.TransactionId}");
-        Console.WriteLine($"userId = {userId}");
-        Console.WriteLine($"existingUserTransaction = {existingUserTransaction}");
-
         if (!existingUserTransaction) return NotFound($"Transaction cannot be found!");
 
         var dispute = new Dispute(request.TransactionId, userId, request.Category, request.Reason);
