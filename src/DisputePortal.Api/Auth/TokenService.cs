@@ -22,9 +22,10 @@ public class TokenService(IConfiguration config)
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var minutes = int.TryParse(jwt["ExpiryMinutes"], out var m) ? m : 60;
         var token = new JwtSecurityToken(
             issuer: jwt["Issuer"], audience: jwt["Audience"],
-            claims: claims, expires: DateTime.UtcNow.AddMinutes(int.Parse(jwt["ExpiryMinutes"]!)),
+            claims: claims, expires: DateTime.UtcNow.AddMinutes(minutes),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

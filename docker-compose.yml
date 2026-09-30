@@ -7,5 +7,26 @@ services:
       POSTGRES_PASSWORD: dev123
     ports: ["5432:5432"]
     volumes: ["dbdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U disputeportal"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: src/DisputePortal.Api/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=disputeportal;Username=disputeportal;Password=dev123"
+      Jwt__Key: "#super-long-super-secret-dev-env-key-2026!"
+      Jwt__Issuer: "DisputePortal"
+      Jwt__Audience: "DisputePortal"
+      Jwt__ExpiryMinutes: "60"
+    ports: ["5290:8080"]
+
 volumes:
   dbdata:
