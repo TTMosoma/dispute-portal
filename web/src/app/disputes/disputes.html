@@ -1,0 +1,48 @@
+<div class="page">
+  <header>
+    <h1>My Disputes</h1>
+    <a routerLink="/transactions">Back to transactions</a>
+  </header>
+
+  @if (loading()) {
+    <p>Loading…</p>
+  } @else if (disputes().length === 0) {
+    <p>You have no disputes yet.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr><th>Raised</th><th>Category</th><th>Status</th><th>Reason</th><th></th></tr>
+      </thead>
+      <tbody>
+        @for (d of disputes(); track d.id) {
+          <tr>
+            <td>{{ d.createdAt | date:'yyyy-MM-dd' }}</td>
+            <td>{{ d.category }}</td>
+            <td><span class="status">{{ d.status }}</span></td>
+            <td>{{ d.reason }}</td>
+            <td><button (click)="toggle(d.id)">{{ expandedId() === d.id ? 'Hide' : 'History' }}</button>
+            @if (canWithdraw(d.status)) {
+              <button (click)="withdraw(d.id)">Withdraw</button>
+            }</td>
+
+          </tr>
+          @if (expandedId() === d.id) {
+            <tr class="history-row">
+              <td colspan="5">
+                <ul>
+                  @for (h of history(); track h.changedAt) {
+                    <li>
+                      {{ h.changedAt | date:'yyyy-MM-dd HH:mm' }} —
+                      {{ h.fromStatus ?? 'Created' }} → <strong>{{ h.toStatus }}</strong>
+                      @if (h.note) { <span class="note">({{ h.note }})</span> }
+                    </li>
+                  }
+                </ul>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  }
+</div>

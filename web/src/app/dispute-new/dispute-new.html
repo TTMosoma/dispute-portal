@@ -1,0 +1,22 @@
+<div class="card">
+  <h1>Raise a Dispute</h1>
+  <form (ngSubmit)="submit()">
+    <label>
+      Category
+      <select name="category" [(ngModel)]="category">
+        @for (c of categories; track c) { <option [value]="c">{{ c }}</option> }
+      </select>
+    </label>
+    <label>
+      Reason
+      <textarea name="reason" [(ngModel)]="reason" required rows="4"></textarea>
+    </label>
+    @if (error()) { <p class="error">{{ error() }}</p> }
+    <div class="buttons">
+      <a routerLink="/transactions">Cancel</a>
+      <button type="submit" [disabled]="loading() || !reason">
+        {{ loading() ? 'Submitting…' : 'Submit dispute' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -33,7 +33,7 @@ public class DisputesController(DisputePortalDbContext db) : ControllerBase
         }
         catch (DbUpdateException)
         {
-            return BadRequest("Unable to save this transaction.");
+            return Conflict("An active dispute already exists for this transaction.");
         }
 
         var response = new DisputeDto(dispute.Id, dispute.TransactionId, dispute.Category.ToString(), dispute.Status.ToString(), dispute.Reason, dispute.CreatedAt, dispute.UpdatedAt);
@@ -161,8 +161,6 @@ public class DisputesController(DisputePortalDbContext db) : ControllerBase
         try
         {
             dispute.MoveToUnderReview(agentId, req.Note);
-            foreach (var e in db.ChangeTracker.Entries())
-                Console.WriteLine($"{e.Entity.GetType().Name} => {e.State} | Id={((dynamic)e.Entity).Id}");
             await db.SaveChangesAsync();
             return NoContent();
         }
