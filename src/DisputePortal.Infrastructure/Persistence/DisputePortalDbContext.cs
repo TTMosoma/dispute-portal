@@ -14,6 +14,13 @@ namespace DisputePortal.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder b)
         {
+            b.Entity<User>().Property(u => u.Id).ValueGeneratedNever();
+            b.Entity<Account>().Property(a => a.Id).ValueGeneratedNever();
+            b.Entity<Transaction>().Property(t => t.Id).ValueGeneratedNever();
+            b.Entity<Dispute>().Property(d => d.Id).ValueGeneratedNever();
+            b.Entity<DisputeStatusHistory>().Property(h => h.Id).ValueGeneratedNever();
+
+
             b.Entity<User>(e =>
             {
                 e.HasKey(c => c.Id);
@@ -59,15 +66,13 @@ namespace DisputePortal.Infrastructure.Persistence
                  .WithOne()
                  .HasForeignKey(h => h.DisputeId)
                  .OnDelete(DeleteBehavior.Cascade);
-
-                e.Metadata.FindNavigation(nameof(Dispute.StatusHistory))!
-                 .SetPropertyAccessMode(PropertyAccessMode.Field);
             });
 
             b.Entity<DisputeStatusHistory>(e =>
             {
                 e.HasKey(h => h.Id);
                 e.Property(h => h.FromStatus).HasConversion<string>().HasMaxLength(16);
+                e.Property(h => h.Id).ValueGeneratedNever();
                 e.Property(h => h.ToStatus).HasConversion<string>().HasMaxLength(16);
                 e.Property(h => h.Note).HasMaxLength(1000);
             });

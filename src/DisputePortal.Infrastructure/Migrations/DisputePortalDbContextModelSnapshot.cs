@@ -22,10 +22,9 @@ namespace DisputePortal.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Account", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Account", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("AccountNumber")
@@ -46,10 +45,9 @@ namespace DisputePortal.Infrastructure.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Dispute", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Dispute", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Category")
@@ -88,10 +86,9 @@ namespace DisputePortal.Infrastructure.Migrations
                     b.ToTable("Disputes");
                 });
 
-            modelBuilder.Entity("DisputeStatusHistory", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.DisputeStatusHistory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("ChangedAt")
@@ -123,10 +120,9 @@ namespace DisputePortal.Infrastructure.Migrations
                     b.ToTable("DisputeStatusHistory");
                 });
 
-            modelBuilder.Entity("Transaction", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AccountId")
@@ -166,10 +162,9 @@ namespace DisputePortal.Infrastructure.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("User", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
@@ -199,43 +194,43 @@ namespace DisputePortal.Infrastructure.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("Account", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Account", b =>
                 {
-                    b.HasOne("User", null)
+                    b.HasOne("DisputePortal.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dispute", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Dispute", b =>
                 {
-                    b.HasOne("Transaction", null)
+                    b.HasOne("DisputePortal.Domain.Entities.Transaction", null)
                         .WithMany()
                         .HasForeignKey("TransactionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DisputeStatusHistory", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.DisputeStatusHistory", b =>
                 {
-                    b.HasOne("Dispute", null)
+                    b.HasOne("DisputePortal.Domain.Entities.Dispute", null)
                         .WithMany("StatusHistory")
                         .HasForeignKey("DisputeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Transaction", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Account", null)
+                    b.HasOne("DisputePortal.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Dispute", b =>
+            modelBuilder.Entity("DisputePortal.Domain.Entities.Dispute", b =>
                 {
                     b.Navigation("StatusHistory");
                 });

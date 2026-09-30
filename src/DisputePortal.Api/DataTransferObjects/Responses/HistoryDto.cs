@@ -1,4 +1,4 @@
-namespace DisputePortal.Api.DataTransferObjects;
+namespace DisputePortal.Api.DataTransferObjects.Responses;
 
 public class HistoryDto
 {

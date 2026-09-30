@@ -10,7 +10,6 @@ namespace DisputePortal.Domain.Entities;
 /// </summary>
 public class Dispute
 {
-    private readonly List<DisputeStatusHistory> _statusHistory = new();
     /// <summary>
     /// Allowed transactions are whitelisted, in matrics format.
     /// This follows the established dispute business rule.
@@ -48,15 +47,14 @@ public class Dispute
     public DisputeStatus Status { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
-    public IReadOnlyCollection<DisputeStatusHistory> StatusHistory { get { return _statusHistory; } }
-
+    public List<DisputeStatusHistory> StatusHistory { get; private set; } = new();
     public void MoveToUnderReview(Guid changedBy, string? note = null) => Transition(DisputeStatus.UnderReview, Role.Agent, changedBy, note);
     public void Resolve(Guid changedBy, string? note = null) => Transition(DisputeStatus.Resolved, Role.Agent, changedBy, note);
     public void Reject(Guid changedBy, string? note = null) => Transition(DisputeStatus.Rejected, Role.Agent, changedBy, note);
     public void Withdraw(Guid changedBy, string? note = null) => Transition(DisputeStatus.Withdrawn, Role.Customer, changedBy, note);
 
     private void AddHistory(DisputeStatus? from, DisputeStatus to, Guid changedBy, string? note, DateTimeOffset time)
-    => _statusHistory.Add(new DisputeStatusHistory(Id, from, to, changedBy, note, time));
+    => StatusHistory.Add(new DisputeStatusHistory(Id, from, to, changedBy, note, time));
 
     /// <summary>
     /// Manages the various status of a dispute.

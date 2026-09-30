@@ -1,6 +1,6 @@
 using DisputePortal.Api.Auth;
-using DisputePortal.Api.DataTransferObjects;
 using DisputePortal.Api.DataTransferObjects.Requests;
+using DisputePortal.Api.DataTransferObjects.Responses;
 using DisputePortal.Domain.Entities;
 using DisputePortal.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authorization;
@@ -20,11 +20,13 @@ public class DisputesController(DisputePortalDbContext db) : ControllerBase
     {
         var userId = User.GetUserId();
 
-        var transactionBelongsToUser = await db.Transactions.AnyAsync(t =>
-            t.Id == request.TransactionId &&
-            db.Accounts.Any(a => a.Id == t.AccountId && a.UserId == userId));
+        var existingUserTransaction = await db.Transactions.AnyAsync(t => t.Id == request.TransactionId && db.Accounts.Any(a => a.UserId == userId && a.Id == t.AccountId));
 
-        if (!transactionBelongsToUser) return NotFound("Transaction not found.");
+        Console.WriteLine($"request.TransactionId = {request.TransactionId}");
+        Console.WriteLine($"userId = {userId}");
+        Console.WriteLine($"existingUserTransaction = {existingUserTransaction}");
+
+        if (!existingUserTransaction) return NotFound($"Transaction cannot be found!");
 
         var dispute = new Dispute(request.TransactionId, userId, request.Category, request.Reason);
         db.Disputes.Add(dispute);
@@ -86,5 +88,91 @@ public class DisputesController(DisputePortalDbContext db) : ControllerBase
             .ToListAsync();
 
         return Ok(history);
+    }
+
+    [HttpPost("{id:guid}/withdraw")]
+    [Authorize(Roles = "Customer")]
+    public async Task<IActionResult> Withdraw(Guid id, TransitionRequest req)
+    {
+        var userId = User.GetUserId();
+        var dispute = await db.Disputes.Include(d => d.StatusHistory)
+            .SingleOrDefaultAsync(d => d.Id == id && d.CustomerId == userId);
+        if (dispute is null) return NotFound();
+
+        try
+        {
+            dispute.Withdraw(userId, req.Note);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (InvalidDisputeTransitionException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("{id:guid}/reject")]
+    [Authorize(Roles = "Agent")]
+    public async Task<IActionResult> Reject(Guid id, TransitionRequest req)
+    {
+        var agentId = User.GetUserId();
+        var dispute = await db.Disputes.Include(d => d.StatusHistory)
+            .SingleOrDefaultAsync(d => d.Id == id); // Agents can act on any dispute.
+        if (dispute is null) return NotFound();
+
+        try
+        {
+            dispute.Reject(agentId, req.Note);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (InvalidDisputeTransitionException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("{id:guid}/resolve")]
+    [Authorize(Roles = "Agent")]
+    public async Task<IActionResult> Resolve(Guid id, TransitionRequest req)
+    {
+        var agentId = User.GetUserId();
+        var dispute = await db.Disputes.Include(d => d.StatusHistory)
+            .SingleOrDefaultAsync(d => d.Id == id);
+        if (dispute is null) return NotFound();
+
+        try
+        {
+            dispute.Resolve(agentId, req.Note);
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (InvalidDisputeTransitionException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("{id:guid}/review")]
+    [Authorize(Roles = "Agent")]
+    public async Task<IActionResult> MoveToUnderReview(Guid id, TransitionRequest req)
+    {
+        var agentId = User.GetUserId();
+        var dispute = await db.Disputes.Include(d => d.StatusHistory)
+            .SingleOrDefaultAsync(d => d.Id == id);
+        if (dispute is null) return NotFound();
+
+        try
+        {
+            dispute.MoveToUnderReview(agentId, req.Note);
+            foreach (var e in db.ChangeTracker.Entries())
+                Console.WriteLine($"{e.Entity.GetType().Name} => {e.State} | Id={((dynamic)e.Entity).Id}");
+            await db.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (InvalidDisputeTransitionException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
